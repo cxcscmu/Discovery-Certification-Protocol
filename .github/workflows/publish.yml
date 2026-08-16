@@ -1,0 +1,132 @@
+name: publish
+
+on:
+  push:
+    tags:
+      - "dcp-audit-v*"
+      - "dcp-harness-v*"
+
+permissions:
+  contents: read
+
+jobs:
+  build-audit:
+    name: Build dcp-audit
+    if: startsWith(github.ref_name, 'dcp-audit-v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install test and build tools
+        run: |
+          python -m pip install --upgrade pip build twine
+          python -m pip install -e ".[dev]"
+      - name: Run verifier release checks
+        run: |
+          python -m pytest -q
+          python -m ruff check dcp tests/test_public_release.py
+      - name: Build wheel and source distribution
+        run: python -m build
+      - name: Check version tag and package metadata
+        run: |
+          version="${GITHUB_REF_NAME#dcp-audit-v}"
+          test -f "dist/dcp_audit-${version}-py3-none-any.whl"
+          test -f "dist/dcp_audit-${version}.tar.gz"
+          python -m twine check dist/*
+      - name: Check public distribution boundary
+        run: python scripts/check_distribution.py dist/*
+      - name: Store distributions
+        uses: actions/upload-artifact@v5
+        with:
+          name: dcp-audit-distributions
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish-audit:
+    name: Publish dcp-audit to PyPI
+    needs: build-audit
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi-audit
+      url: https://pypi.org/p/dcp-audit
+    permissions:
+      id-token: write
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v6
+        with:
+          name: dcp-audit-distributions
+          path: dist/
+      - name: Publish distributions
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
+          print-hash: true
+
+  build-harness:
+    name: Build dcp-harness
+    if: startsWith(github.ref_name, 'dcp-harness-v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install test and build tools
+        run: |
+          python -m pip install --upgrade pip build twine
+          python -m pip install -e ".[dev]"
+          python -m pip install --no-deps -e packages/dcp-harness
+      - name: Run harness release checks
+        run: |
+          PYTHONPATH=.:packages/dcp-harness/src python -m pytest packages/dcp-harness/tests -q
+          python -m ruff check packages/dcp-harness/src packages/dcp-harness/tests scripts/check_harness_distribution.py
+      - name: Build wheel and source distribution
+        run: python -m build packages/dcp-harness
+      - name: Check version tag and package metadata
+        run: |
+          version="${GITHUB_REF_NAME#dcp-harness-v}"
+          test -f "packages/dcp-harness/dist/dcp_harness-${version}-py3-none-any.whl"
+          test -f "packages/dcp-harness/dist/dcp_harness-${version}.tar.gz"
+          python -m twine check packages/dcp-harness/dist/*
+      - name: Check public distribution boundary
+        run: >-
+          python scripts/check_harness_distribution.py
+          packages/dcp-harness/dist/*
+      - name: Store distributions
+        uses: actions/upload-artifact@v5
+        with:
+          name: dcp-harness-distributions
+          path: packages/dcp-harness/dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish-harness:
+    name: Publish dcp-harness to PyPI
+    needs: build-harness
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi-harness
+      url: https://pypi.org/p/dcp-harness
+    permissions:
+      id-token: write
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v6
+        with:
+          name: dcp-harness-distributions
+          path: dist/
+      - name: Publish distributions
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
+          print-hash: true
