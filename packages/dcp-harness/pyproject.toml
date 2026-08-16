@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dcp-harness"
+version = "0.1.0a1"
+description = "Controlled evidence-producing harness for the Discovery Certification Protocol"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.11"
+license = "Apache-2.0"
+dependencies = ["dcp-audit==0.4.2"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Repository = "https://github.com/cxcscmu/Discovery-Certification-Protocol"
+Issues = "https://github.com/cxcscmu/Discovery-Certification-Protocol/issues"
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<9", "ruff==0.15.20", "build>=1.2,<2"]
+
+[project.scripts]
+dcp-harness = "dcp_harness.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["dcp_harness"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+dcp_harness = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"

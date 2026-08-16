@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dcp-audit"
+dynamic = ["version"]
+description = "Offline verifier for Discovery Certification Protocol audit bundles"
+readme = { file = "README_PYPI.md", content-type = "text/markdown" }
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+dependencies = [
+  "numpy==2.4.6",
+  "scipy==1.17.1",
+]
+keywords = [
+  "auto-research",
+  "research-agents",
+  "audit",
+  "verification",
+  "novelty",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Science/Research",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Repository = "https://github.com/cxcscmu/Discovery-Certification-Protocol"
+Issues = "https://github.com/cxcscmu/Discovery-Certification-Protocol/issues"
+
+[project.scripts]
+dcp = "dcp.cli:main"
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "ruff==0.15.20",
+]
+
+[tool.setuptools]
+packages = ["dcp"]
+include-package-data = false
+
+[tool.setuptools.package-data]
+dcp = ["py.typed"]
+
+[tool.setuptools.dynamic]
+version = { attr = "dcp.__version__" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"

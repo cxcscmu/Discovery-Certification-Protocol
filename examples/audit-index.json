@@ -1,0 +1,57 @@
+{
+  "schema": "dcp-public-audit-index-v1",
+  "examples": [
+    {
+      "name": "sqlite-web",
+      "bundle_path": "examples/audits/sqlite-web",
+      "publication_bundle_id": "sha256:eff6cf27afa58da58fc2591fff3be9116c0ee0fe896dc9f60a8c51376e504846",
+      "certificate_payload_digest": "sha256:c64e0d650b69fdafd9f504fe650a271695b81a2a1ac366a9f4696ea5d3f59e4b",
+      "certificate_object_digest": "sha256:75b4e66adca9fc898f79804a5ed16c2a2366cb37fb459a02f2326680006b899e",
+      "canonical_record": {
+        "type": "dcp_reference_certificate_v1",
+        "id": "sha256:b3f0af47968ba2cb82afa0506deb14f32b58449ff6887039c8e015c1cfde6a3d"
+      },
+      "expected_core": "certified",
+      "expected_evidence": "certified"
+    },
+    {
+      "name": "virtual-catalyst",
+      "bundle_path": "examples/audits/virtual-catalyst",
+      "publication_bundle_id": "sha256:fa17603f2184bb7b6a9a2432baa48766847fe27a4edcebd887697ccacfcaf1c2",
+      "certificate_payload_digest": "sha256:cdab48b505c3685dd42d8c4a5a5fae14b853deccedb71359f72fa30c6b613fe9",
+      "certificate_object_digest": "sha256:b1219724b137d839b919ebc9d36d2e215bbf7b05038584b3dd77046da9bc3f9f",
+      "canonical_record": {
+        "type": "dcp-audit-bundle/full_audit_v1",
+        "id": "sha256:fa17603f2184bb7b6a9a2432baa48766847fe27a4edcebd887697ccacfcaf1c2"
+      },
+      "expected_core": "certified",
+      "expected_evidence": "certified"
+    },
+    {
+      "name": "sqlite-core",
+      "bundle_path": "examples/audits/sqlite-core",
+      "publication_bundle_id": "sha256:3690bebc8b3ac882ab17ad0f8a61b05ea630443dbc85e36965eabf27e1f1bbca",
+      "certificate_payload_digest": "sha256:8b014c7a2a1f486461585fd5c87c33c5b698d194a98ff7389e80636eb69f79d8",
+      "certificate_object_digest": "sha256:687957f970332331ac8a1e9da36318392060a92d41d3189a04b850bbd5d7fd88",
+      "canonical_record": {
+        "type": "dcp-core-evidence-bundle",
+        "id": "sha256:3690bebc8b3ac882ab17ad0f8a61b05ea630443dbc85e36965eabf27e1f1bbca"
+      },
+      "expected_core": "certified",
+      "expected_evidence": "not_tested"
+    },
+    {
+      "name": "device-calibration-core",
+      "bundle_path": "examples/audits/device-calibration-core",
+      "publication_bundle_id": "sha256:dff7b57b062362e036fb26e7da94959e7d4900e5007b839e43e5fa107a507945",
+      "certificate_payload_digest": "sha256:06b407d740d9b974d6a0b4637ff3f7ea12a394d49bf3535bcfb1e99bcd3a253b",
+      "certificate_object_digest": "sha256:1f672fbc596bcda026858539cfa71764568d03ccfab2273d6085374a96a43e8e",
+      "canonical_record": {
+        "type": "dcp-core-evidence-bundle",
+        "id": "sha256:dff7b57b062362e036fb26e7da94959e7d4900e5007b839e43e5fa107a507945"
+      },
+      "expected_core": "certified",
+      "expected_evidence": "not_tested"
+    }
+  ]
+}

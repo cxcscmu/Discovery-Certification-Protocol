@@ -1,0 +1,28 @@
+include MANIFEST.in
+include LICENSE
+include README_PYPI.md
+include pyproject.toml
+recursive-include dcp *.py
+include dcp/py.typed
+
+exclude README.md
+exclude dcp/README.md
+exclude .env
+exclude texput.log
+
+prune .github
+prune agent_core
+prune artifacts
+prune artifacts_registry
+prune discovery_certification
+prune docs
+prune examples
+prune multi_agent_graph_operator
+prune multi_agent_graph_primitive
+prune paper
+prune reference_harness
+prune scripts
+prune tests
+
+global-exclude __pycache__
+global-exclude *.py[cod]
