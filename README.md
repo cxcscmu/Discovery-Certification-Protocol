@@ -3,8 +3,8 @@
 <p align="center">
   <a href="https://github.com/cxcscmu/Discovery-Certification-Protocol"><img src="https://img.shields.io/badge/GitHub-Repository-181717?logo=github" alt="GitHub repository"></a>
   <a href="https://arxiv.org/abs/XXXX.XXXXX"><img src="https://img.shields.io/badge/Paper-arXiv-b31b1b?logo=arxiv" alt="arXiv paper"></a>
-  <a href="https://pypi.org/project/dcp-audit/"><img src="https://img.shields.io/badge/PyPI-dcp--audit-3775A9?logo=pypi" alt="dcp-audit on PyPI"></a>
-  <a href="https://pypi.org/project/dcp-harness/"><img src="https://img.shields.io/badge/PyPI-dcp--harness-3775A9?logo=pypi" alt="dcp-harness on PyPI"></a>
+  <a href="https://pypi.org/project/dcp-audit/"><img src="https://img.shields.io/pypi/v/dcp-audit?label=dcp-audit&logo=pypi&color=3775A9" alt="dcp-audit on PyPI"></a>
+  <a href="https://pypi.org/project/dcp-harness/"><img src="https://img.shields.io/pypi/v/dcp-harness?label=dcp-harness&logo=pypi&color=3775A9" alt="dcp-harness on PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-D22128" alt="Apache-2.0 license"></a>
 </p>
 
@@ -18,8 +18,8 @@ This repository publishes two Python packages.
 
 | Package | Import | Command | Use it when |
 | --- | --- | --- | --- |
-| `dcp-audit` | `dcp` | `dcp verify` | You already have an Audit Bundle and want to verify it offline |
-| `dcp-harness` | `dcp_harness` | `dcp-harness` | You want to capture a prospective agent run, run its controls, and produce an Audit Bundle |
+| [`dcp-audit`](https://pypi.org/project/dcp-audit/) | `dcp` | `dcp verify` | You already have an Audit Bundle and want to verify it offline |
+| [`dcp-harness`](https://pypi.org/project/dcp-harness/) | `dcp_harness` | `dcp-harness` | You want to capture a prospective agent run, run its controls, and produce an Audit Bundle |
 
 The verifier is deliberately small and model-free. The harness is a separate
 Claude Code CLI wrapper because producing evidence requires agent execution,
