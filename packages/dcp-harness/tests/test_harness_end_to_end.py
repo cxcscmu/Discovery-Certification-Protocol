@@ -835,6 +835,86 @@ def test_full_three_gate_run_is_certified_and_replayable(audit):
     assert backend.calls == 2 + 60 * 2 + 45 + 31 * 2 * 2 + 42 * 2 * 2
 
 
+def test_gate3_resumes_from_receipts_and_completed_branches(audit, monkeypatch):
+    harness, backend = audit
+    harness.capture()
+    harness.challenge()
+
+    append = harness.ledger.append
+
+    def stop_after_preseal(event_type, payload):
+        event = append(event_type, payload)
+        if event_type == "gate3_contracts_presealed":
+            raise KeyboardInterrupt("stopped before the state file was updated")
+        return event
+
+    with monkeypatch.context() as patch:
+        patch.setattr(harness.ledger, "append", stop_after_preseal)
+        with pytest.raises(KeyboardInterrupt):
+            harness.gate3()
+    preseal = harness.ledger.events()[-1]
+    assert preseal["event_type"] == "gate3_contracts_presealed"
+
+    run_episode = harness._run_episode
+
+    def stop_after_branch(**kwargs):
+        run_episode(**kwargs)
+        raise KeyboardInterrupt("stopped after a committed branch")
+
+    with monkeypatch.context() as patch:
+        patch.setattr(harness, "_run_episode", stop_after_branch)
+        with pytest.raises(KeyboardInterrupt):
+            harness.gate3()
+
+    run_pair_family = harness._run_pair_family
+
+    def stop_between_families(**kwargs):
+        if kwargs["family"] == "sham":
+            raise KeyboardInterrupt("stopped between pair families")
+        return run_pair_family(**kwargs)
+
+    with monkeypatch.context() as patch:
+        patch.setattr(harness, "_run_pair_family", stop_between_families)
+        with pytest.raises(KeyboardInterrupt):
+            harness.gate3()
+
+    summary = harness.gate3()
+    assert summary["contract_preseal_event_index"] == preseal["event_index"]
+    assert summary["contract_preseal_receipt_hash"] == preseal["event_hash"]
+    assert (
+        summary["contract_preseal_event_index"]
+        < summary["first_branch_started_event_index"]
+    )
+    gate3_events = [
+        event for event in harness.ledger.events()
+        if event["event_type"].startswith("gate3_")
+    ]
+    identities = [
+        (event["event_type"], event["payload"].get("pair_id"),
+         event["payload"].get("phase"))
+        for event in gate3_events
+    ]
+    assert len(identities) == len(set(identities))
+    report = harness.finalize()
+    assert report["verdict"]["core"] == "certified"
+    assert report["verdict"]["evidence"] == "certified"
+    assert verify_bundle(harness.root / "bundle")["ok"] is True
+    assert backend.calls == 2 + 60 * 2 + 45 + 31 * 2 * 2 + 42 * 2 * 2
+
+
+def test_resumed_gate3_receipt_cannot_change_its_payload(audit):
+    harness, _backend = audit
+    payload = {"pair_id": "pair-1", "phase": "truthful", "slot": 0}
+    event = harness._gate3_event("gate3_branch_prestarted", payload)
+    assert harness._gate3_event("gate3_branch_prestarted", payload) == event
+    count = len(harness.ledger.events())
+    with pytest.raises(HarnessError, match="conflicting Gate-3 receipt"):
+        harness._gate3_event(
+            "gate3_branch_prestarted", {**payload, "slot": 1}
+        )
+    assert len(harness.ledger.events()) == count
+
+
 def test_web_snapshot_replay_and_tamper_detection(audit):
     harness, _backend = audit
     harness.capture()
@@ -919,6 +999,25 @@ def test_init_template_stops_until_private_materials_are_sealed(tmp_path: Path):
     config = load_config(project / "dcp-harness.json")
     with pytest.raises(HarnessError, match="seal task-specific audit materials"):
         Harness(config, project / "run", backend=FakeBackend())
+
+
+def test_init_force_preserves_user_files_and_adds_missing_files(tmp_path: Path):
+    project = tmp_path / "generated"
+    _init(project, force=False)
+    saved = {}
+    for name in ("dcp-harness.json", "task_adapter.py", "workspace/README.txt"):
+        content = f"user-owned {name}\n".encode()
+        (project / name).write_bytes(content)
+        saved[name] = content
+    with pytest.raises(HarnessError, match="add missing files"):
+        _init(project, force=False)
+    _init(project, force=True)
+    assert all((project / name).read_bytes() == data for name, data in saved.items())
+    (project / "task_adapter.py").unlink()
+    _init(project, force=True)
+    assert "class TaskAdapter" in (project / "task_adapter.py").read_text()
+    for name in ("dcp-harness.json", "workspace/README.txt"):
+        assert (project / name).read_bytes() == saved[name]
 
 
 def test_frozen_registration_tamper_stops_before_agent_call(audit):

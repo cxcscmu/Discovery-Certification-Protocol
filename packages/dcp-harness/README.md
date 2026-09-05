@@ -27,12 +27,16 @@ immediately checks that the resulting Bundle replays exactly.
 ```bash
 python -m pip install dcp-harness
 dcp-harness init my-audit
+# Complete task_adapter.py and configure the model and Docker image first.
 dcp-harness doctor --config my-audit/dcp-harness.json
 dcp-harness run --config my-audit/dcp-harness.json --run my-audit/run-001
 dcp verify my-audit/run-001/bundle
 ```
 
-The commands can also be run separately and resumed safely.
+`init --force` adds missing starter files without overwriting existing files.
+The commands can also be run separately. Resuming Gate 3 reuses its existing
+receipts and completed branches. An interrupted model call with no committed
+turn record remains unresolved rather than being silently retried.
 
 ```bash
 dcp-harness capture   --config my-audit/dcp-harness.json --run my-audit/run-001
@@ -52,6 +56,11 @@ neutral observations. `assemble_evidence()` derives scores, hashes, counts,
 and branch records mechanically. Its `AuditAttestations` input contains the
 small set of task-specific judgments that cannot be inferred from bytes. Every
 attestation defaults to false.
+
+Built-in positive controls check file delivery and response formatting by
+copying a canary. They do not independently establish the proposal's broader
+Memory, Web, and known-component calibration coverage. Assess that coverage
+separately when approving a new task's audit.
 
 The model API connection is infrastructure transport, not a research Web
 channel. In container mode the agent has no tool capable of starting an

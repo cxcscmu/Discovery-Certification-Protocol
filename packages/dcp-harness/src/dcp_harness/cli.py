@@ -27,7 +27,10 @@ def _parser() -> argparse.ArgumentParser:
 
     init_parser = subparsers.add_parser("init", help="create a minimal audit project")
     init_parser.add_argument("directory")
-    init_parser.add_argument("--force", action="store_true")
+    init_parser.add_argument(
+        "--force", action="store_true",
+        help="add missing files in an existing directory; never overwrite files",
+    )
 
     doctor = subparsers.add_parser("doctor", help="check the frozen adapter and agent backend")
     doctor.add_argument("--config", required=True)
@@ -212,12 +215,12 @@ def _init(directory: Path, *, force: bool) -> dict[str, Any]:
     workspace.mkdir(exist_ok=True)
     config_path = directory / "dcp-harness.json"
     adapter_path = directory / "task_adapter.py"
-    if force or not config_path.exists():
+    if not config_path.exists():
         write_json(config_path, template())
-    if force or not adapter_path.exists():
+    if not adapter_path.exists():
         adapter_path.write_text(_ADAPTER_TEMPLATE, encoding="utf-8")
     readme = workspace / "README.txt"
-    if force or not readme.exists():
+    if not readme.exists():
         readme.write_text(
             "Place only the public starter workspace here. Private verifier data must stay outside this directory.\n",
             encoding="utf-8",

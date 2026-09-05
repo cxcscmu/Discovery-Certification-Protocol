@@ -758,7 +758,7 @@ class Harness:
             state["phases"]["gate3"] = "running"
             self._write_state(state)
             main = load_json_object(self.root / "main/summary.json")
-            preseal = self.ledger.append(
+            preseal = self._gate3_event(
                 "gate3_contracts_presealed",
                 {
                     "checkpoint_hash": main["selected_checkpoint_hash"],
@@ -818,6 +818,26 @@ class Harness:
             )
             return summary
 
+    def _gate3_event(
+        self, event_type: str, payload: dict[str, Any]
+    ) -> dict[str, Any]:
+        """Reuse an existing receipt when resuming the same Gate-3 step."""
+
+        matches = [
+            event
+            for event in self.ledger.events()
+            if event["event_type"] == event_type
+            and all(
+                event["payload"].get(key) == payload.get(key)
+                for key in ("pair_id", "phase")
+            )
+        ]
+        if matches:
+            if len(matches) != 1 or matches[0]["payload"] != payload:
+                raise HarnessError(f"conflicting Gate-3 receipt: {event_type}")
+            return matches[0]
+        return self.ledger.append(event_type, payload)
+
     def _run_pair_family(
         self,
         *,
@@ -849,7 +869,7 @@ class Harness:
                 if self._draw_bit(f"{pair_id}:order"):
                     order.reverse()
                 draw_receipt = self._draw_receipt(f"{pair_id}:order")
-                randomized_event = self.ledger.append(
+                randomized_event = self._gate3_event(
                     "gate3_pair_randomized",
                     {
                         "family": family,
@@ -862,7 +882,7 @@ class Harness:
                 )
                 branch_prestarts: dict[str, dict[str, Any]] = {}
                 for phase in phases:
-                    sealed = self.ledger.append(
+                    sealed = self._gate3_event(
                         "gate3_branch_prestarted",
                         {
                             "family": family,
@@ -889,7 +909,7 @@ class Harness:
                 first_execution_event_index: int | None = None
                 for phase in order:
                     episode_id = f"{pair_id}-{phase.value}"
-                    execution_started = self.ledger.append(
+                    execution_started = self._gate3_event(
                         "gate3_branch_execution_started",
                         {
                             "family": family,
