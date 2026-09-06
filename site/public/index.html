@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#080b14" />
+    <title>DCP · Discovery Certification Protocol for AI Research Agents</title>
+    <meta
+      name="description"
+      content="Turn AI research claims into testable evidence. Explore the Discovery Certification Protocol, replay two complete audits, and get the open-source verifier and research harness."
+    />
+    <link
+      rel="canonical"
+      href="https://cxcscmu.github.io/Discovery-Certification-Protocol/"
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="DCP · Scores Alone Do Not Prove Discovery"
+    />
+    <meta
+      property="og:description"
+      content="The Discovery Certification Protocol for Auditing AI Research Agents. Three gates. Two open-source packages. Evidence you can replay."
+    />
+    <meta
+      property="og:url"
+      content="https://cxcscmu.github.io/Discovery-Certification-Protocol/"
+    />
+    <meta
+      property="og:image"
+      content="https://cxcscmu.github.io/Discovery-Certification-Protocol/assets/social-preview.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="citation_title"
+      content="Scores Alone Do Not Prove Discovery: The Discovery Certification Protocol for Auditing AI Research Agents"
+    />
+    <meta name="citation_author" content="Jingjie Ning" />
+    <meta name="citation_author" content="Shanshan Zhong" />
+    <meta name="citation_author" content="Xiaochuan Li" />
+    <meta name="citation_author" content="Ji Zeng" />
+    <meta name="citation_publication_date" content="2026" />
+    <meta
+      name="citation_pdf_url"
+      content="https://cxcscmu.github.io/Discovery-Certification-Protocol/assets/dcp-paper.pdf"
+    />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link
+      rel="preload"
+      href="assets/Inter-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="assets/Inter-SemiBold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="main.js" defer></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ScholarlyArticle",
+        "name": "Scores Alone Do Not Prove Discovery: The Discovery Certification Protocol for Auditing AI Research Agents",
+        "description": "An outcome-level protocol for testing registered recovery bounds and feedback effects in AI research.",
+        "url": "https://cxcscmu.github.io/Discovery-Certification-Protocol/",
+        "encoding": {
+          "@type": "MediaObject",
+          "contentUrl": "https://cxcscmu.github.io/Discovery-Certification-Protocol/assets/dcp-paper.pdf",
+          "encodingFormat": "application/pdf"
+        },
+        "author": [
+          { "@type": "Person", "name": "Jingjie Ning" },
+          { "@type": "Person", "name": "Shanshan Zhong" },
+          { "@type": "Person", "name": "Xiaochuan Li" },
+          { "@type": "Person", "name": "Ji Zeng" }
+        ],
+        "keywords": [
+          "AI research agents",
+          "automated research",
+          "discovery certification",
+          "feedback attribution",
+          "reproducibility"
+        ],
+        "isAccessibleForFree": true
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <svg class="svg-defs" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <symbol id="i-arrow" viewBox="0 0 24 24">
+          <path d="M5 12h14m-6-6 6 6-6 6" />
+        </symbol>
+        <symbol id="i-external" viewBox="0 0 24 24">
+          <path d="M7 17 17 7M7 7h10v10" />
+        </symbol>
+        <symbol id="i-check" viewBox="0 0 24 24">
+          <path d="m5 12 4 4L19 6" />
+        </symbol>
+        <symbol id="i-code" viewBox="0 0 24 24">
+          <path d="m7 7-5 5 5 5m10-10 5 5-5 5m-3-14-4 18" />
+        </symbol>
+        <symbol id="i-flask" viewBox="0 0 24 24">
+          <path
+            d="M9 3h6m-5 0v7L4 19a1 1 0 0 0 1 2h14a1 1 0 0 0 1-2l-6-9V3M7 15h10"
+          />
+          <circle cx="11" cy="18" r=".5" />
+        </symbol>
+        <symbol id="i-document" viewBox="0 0 24 24">
+          <path d="M14 2H5v20h14V7l-5-5v5h5M8 12h8m-8 4h6" />
+        </symbol>
+        <symbol id="i-network" viewBox="0 0 24 24">
+          <circle cx="12" cy="5" r="3" />
+          <circle cx="5" cy="19" r="3" />
+          <circle cx="19" cy="19" r="3" />
+          <path d="m10 8-4 8m8-8 4 8M8 19h8" />
+        </symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24">
+          <path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4Z" />
+          <path d="m8 12 3 3 5-6" />
+        </symbol>
+        <symbol id="i-globe" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <ellipse cx="12" cy="12" rx="4" ry="10" />
+          <path d="M2 12h20" />
+        </symbol>
+        <symbol id="i-feedback" viewBox="0 0 24 24">
+          <path d="M21 11a9 9 0 1 0-3 7M21 4v7h-7" />
+          <path d="m8 12 3 3 5-6" />
+        </symbol>
+        <symbol id="i-db" viewBox="0 0 24 24">
+          <ellipse cx="12" cy="5" rx="8" ry="3" />
+          <path d="M4 5v14c0 4 16 4 16 0V5M4 12c0 4 16 4 16 0" />
+        </symbol>
+        <symbol id="i-copy" viewBox="0 0 24 24">
+          <rect x="8" y="8" width="12" height="13" rx="2" />
+          <path d="M16 8V3H3v13h5" />
+        </symbol>
+        <symbol id="i-box" viewBox="0 0 24 24">
+          <path
+            d="m12 2 9 5v10l-9 5-9-5V7l9-5Zm-9 5 9 5 9-5m-9 5v10M7.5 4.5l9 5"
+          />
+        </symbol>
+        <symbol id="i-pause" viewBox="0 0 24 24">
+          <path d="M8 5v14m8-14v14" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <header class="site-header">
+      <nav class="nav-shell" aria-label="Main navigation">
+        <a class="brand" href="#top" aria-label="DCP home"
+          ><span class="brand-mark">DCP<span>.</span></span
+          ><span class="brand-descriptor"
+            >Discovery Certification<br />Protocol</span
+          ></a
+        >
+        <div class="nav-links">
+          <a href="#protocol">Protocol</a><a href="#evidence">Evidence</a
+          ><a href="#start">Get started</a>
+        </div>
+        <a class="nav-paper" href="assets/dcp-paper.pdf"
+          >Read the paper <svg class="icon"><use href="#i-external" /></svg
+        ></a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero-aurora" aria-hidden="true"></div>
+        <div class="hero-grid wrap">
+          <div class="hero-copy">
+            <p class="eyebrow">
+              <span class="status-dot"></span> A NEW EVIDENCE STANDARD FOR AI
+              RESEARCH
+            </p>
+            <h1 id="hero-title">
+              A high score.<br /><span class="gradient-text"
+                >A deeper question.</span
+              >
+            </h1>
+            <p class="hero-question">
+              What did the research process contribute?
+            </p>
+            <p class="hero-description">
+              The <strong>Discovery Certification Protocol</strong> turns AI
+              research claims into testable evidence. Validate the gain.
+              Challenge its recovery. Measure the contribution of feedback.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#protocol"
+                >Explore DCP <svg class="icon"><use href="#i-arrow" /></svg></a
+              ><a class="button button-glass" href="assets/dcp-paper.pdf"
+                ><svg class="icon"><use href="#i-document" /></svg> Read the
+                paper</a
+              >
+            </div>
+            <div class="hero-affiliation">
+              <span class="affiliation-rule"></span
+              ><span
+                >Carnegie Mellon University<br /><strong
+                  >School of Computer Science</strong
+                ></span
+              >
+            </div>
+          </div>
+
+          <div
+            class="research-scene"
+            aria-label="Interactive illustration of an AI research loop"
+          >
+            <div class="scene-topline">
+              <span><span class="status-dot"></span> THE RESEARCH LOOP</span
+              ><button
+                class="motion-toggle"
+                type="button"
+                aria-pressed="false"
+                aria-label="Pause visual motion"
+              >
+                <svg class="icon"><use href="#i-pause" /></svg>
+              </button>
+            </div>
+            <div class="orbital-map" id="orbital-map">
+              <canvas id="research-particles" aria-hidden="true"></canvas>
+              <svg
+                class="orbit-fallback"
+                viewBox="0 0 600 540"
+                aria-hidden="true"
+              >
+                <ellipse cx="300" cy="270" rx="205" ry="106" />
+                <ellipse
+                  cx="300"
+                  cy="270"
+                  rx="205"
+                  ry="106"
+                  transform="rotate(60 300 270)"
+                />
+                <ellipse
+                  cx="300"
+                  cy="270"
+                  rx="205"
+                  ry="106"
+                  transform="rotate(-60 300 270)"
+                />
+              </svg>
+              <div class="core-orb" aria-hidden="true">
+                <div class="orb-shine"></div>
+                <span class="orb-logo">DCP</span
+                ><span class="orb-label">FOLLOW THE EVIDENCE</span>
+              </div>
+              <button
+                type="button"
+                class="orbit-node node-start is-active"
+                data-stage="start"
+                aria-pressed="true"
+              >
+                <span class="node-icon"
+                  ><svg class="icon"><use href="#i-code" /></svg></span
+                ><span class="node-caption"
+                  ><small>01 / INITIAL INFORMATION</small
+                  ><strong>Start with a question</strong></span
+                >
+              </button>
+              <button
+                type="button"
+                class="orbit-node node-experiment"
+                data-stage="experiment"
+                aria-pressed="false"
+              >
+                <span class="node-icon"
+                  ><svg class="icon"><use href="#i-flask" /></svg></span
+                ><span class="node-caption"
+                  ><small>02 / EXPERIMENT</small
+                  ><strong>Put ideas to the test</strong></span
+                >
+              </button>
+              <button
+                type="button"
+                class="orbit-node node-feedback"
+                data-stage="feedback"
+                aria-pressed="false"
+              >
+                <span class="node-icon"
+                  ><svg class="icon"><use href="#i-feedback" /></svg></span
+                ><span class="node-caption"
+                  ><small>03 / ADAPTIVE FEEDBACK</small
+                  ><strong>Learn from the result</strong></span
+                >
+              </button>
+              <button
+                type="button"
+                class="orbit-node node-record"
+                data-stage="record"
+                aria-pressed="false"
+              >
+                <span class="node-icon"
+                  ><svg class="icon"><use href="#i-document" /></svg></span
+                ><span class="node-caption"
+                  ><small>04 / RESEARCH RECORD</small
+                  ><strong>Keep the evidence</strong></span
+                >
+              </button>
+              <span class="orbit-footnote"
+                >INTERACTIVE PROTOCOL ILLUSTRATION</span
+              >
+            </div>
+            <div class="scene-caption">
+              <span class="scene-index" id="scene-index">01</span>
+              <p id="scene-description">
+                Freeze the model, starting material, evaluator, and budgets
+                before the research run.
+              </p>
+              <span class="scene-hint"
+                >SELECT A NODE <svg class="icon"><use href="#i-external" /></svg
+              ></span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-footer wrap">
+          <span>From an impressive result to an inspectable claim.</span
+          ><a href="#protocol">Follow the evidence <span>↓</span></a>
+        </div>
+      </section>
+
+      <div class="resource-strip">
+        <div class="wrap resource-inner">
+          <span>OPEN RESEARCH. EXECUTABLE EVIDENCE.</span
+          ><a href="https://pypi.org/project/dcp-audit/"
+            ><svg class="icon"><use href="#i-box" /></svg> dcp-audit
+            <span>↗</span></a
+          ><a href="https://pypi.org/project/dcp-harness/"
+            ><svg class="icon"><use href="#i-box" /></svg> dcp-harness
+            <span>↗</span></a
+          ><a href="https://github.com/cxcscmu/Discovery-Certification-Protocol"
+            ><img src="assets/github.svg" width="19" height="19" alt="" />
+            GitHub <span>↗</span></a
+          >
+        </div>
+      </div>
+
+      <section
+        class="section protocol-section wrap"
+        id="protocol"
+        aria-labelledby="protocol-title"
+      >
+        <div class="section-heading reveal">
+          <p class="eyebrow">THE PROTOCOL</p>
+          <h2 id="protocol-title">
+            One result.<br /><span class="muted">Three sharper questions.</span>
+          </h2>
+          <p>
+            An AI research agent proposes ideas, runs experiments, and uses
+            feedback to choose its next step. DCP tests the outcome and the
+            evidence behind that loop.
+          </p>
+        </div>
+        <div class="gates-grid">
+          <article class="gate-card gate-blue reveal" data-glow>
+            <div class="gate-top">
+              <span class="gate-number">01</span
+              ><span class="gate-tag">VALIDATE</span
+              ><span class="round-icon"
+                ><svg class="icon"><use href="#i-shield" /></svg
+              ></span>
+            </div>
+            <div
+              class="gate-visual improvement-visual"
+              aria-label="Illustration of a result exceeding a registered improvement threshold"
+            >
+              <div class="visual-bar baseline-bar"><span>Baseline</span></div>
+              <div class="visual-bar result-bar">
+                <span>Research result</span
+                ><svg class="icon"><use href="#i-check" /></svg>
+              </div>
+              <div class="threshold-line"><span>Registered margin</span></div>
+            </div>
+            <h3>Does the result hold up?</h3>
+            <p>
+              Check a valid artifact against a frozen baseline on a sealed
+              evaluator. Establish a useful, measurable gain.
+            </p>
+            <div class="gate-output">
+              <span class="mini-dot"></span> A validated outcome
+            </div>
+          </article>
+          <article class="gate-card gate-purple reveal" data-glow>
+            <div class="gate-top">
+              <span class="gate-number">02</span
+              ><span class="gate-tag">CHALLENGE</span
+              ><span class="round-icon"
+                ><svg class="icon"><use href="#i-network" /></svg
+              ></span>
+            </div>
+            <div
+              class="gate-visual challenge-visual"
+              aria-label="Illustration of three fresh matched agents attempting the same outcome"
+            >
+              <div class="challenger-row">
+                <span
+                  ><svg class="icon"><use href="#i-code" /></svg></span
+                ><span
+                  ><svg class="icon"><use href="#i-code" /></svg></span
+                ><span
+                  ><svg class="icon"><use href="#i-code" /></svg
+                ></span>
+              </div>
+              <div class="challenge-connections" aria-hidden="true"></div>
+              <div class="target-pill">Same numerical target</div>
+            </div>
+            <h3>Could a fresh agent recover it?</h3>
+            <p>
+              Give matched agents the starting information and captured Web
+              content, with the target research history withheld. Count every
+              qualifying recovery.
+            </p>
+            <div class="gate-output">
+              <span class="mini-dot"></span> Bounded recovery evidence
+            </div>
+          </article>
+          <article class="gate-card gate-green reveal" data-glow>
+            <div class="gate-top">
+              <span class="gate-number">03</span
+              ><span class="gate-tag">ATTRIBUTE · OPTIONAL</span
+              ><span class="round-icon"
+                ><svg class="icon"><use href="#i-feedback" /></svg
+              ></span>
+            </div>
+            <div
+              class="gate-visual feedback-visual"
+              aria-label="Illustration of fresh paired runs from one checkpoint"
+            >
+              <div class="checkpoint-dot"></div>
+              <div class="pair-branch truthful-branch">
+                <span class="branch-dot"></span>Truthful feedback<span>↗</span>
+              </div>
+              <div class="pair-branch neutral-branch">
+                <span class="branch-dot"></span>Neutral feedback<span>→</span>
+              </div>
+              <span class="calibration-note"
+                ><svg class="icon"><use href="#i-check" /></svg> Separate null
+                calibration</span
+              >
+            </div>
+            <h3>What did feedback contribute?</h3>
+            <p>
+              Compare fresh paired runs from a shared checkpoint. Test truthful
+              feedback against a registered neutral policy with independent null
+              calibration.
+            </p>
+            <div class="gate-output">
+              <span class="mini-dot"></span> A calibrated feedback effect
+            </div>
+          </article>
+        </div>
+        <div class="decision-strip reveal">
+          <div>
+            <span class="decision-pill">DCP Core</span>
+            <p>
+              Valid gain + adequate controls + zero recoveries + a passing
+              probability bound.
+            </p>
+          </div>
+          <span class="decision-plus">+</span>
+          <div>
+            <span class="decision-pill evidence-pill">DCP Evidence</span>
+            <p>
+              Core + a supported paired feedback effect over a calibrated
+              neutral policy.
+            </p>
+          </div>
+        </div>
+        <div class="protocol-details reveal">
+          <p>
+            A registered episode includes the agent’s full budget, candidates,
+            and selection procedure. A qualifying recovery vetoes Core
+            eligibility. Incomplete controls or insufficient evidence produce an
+            inconclusive decision.
+          </p>
+          <a class="text-link" href="assets/dcp-paper.pdf"
+            >Read the methodology <svg class="icon"><use href="#i-arrow" /></svg
+          ></a>
+        </div>
+      </section>
+
+      <section
+        class="evidence-section section"
+        id="evidence"
+        aria-labelledby="evidence-title"
+      >
+        <div class="wrap">
+          <div class="section-heading heading-split reveal">
+            <div>
+              <p class="eyebrow">THE EVIDENCE</p>
+              <h2 id="evidence-title">
+                Different tasks.<br /><span class="muted"
+                  >The same questions.</span
+                >
+              </h2>
+            </div>
+            <p>
+              Two controlled, three-gate audits with known information
+              boundaries. Each uses its own frozen model and task. Every
+              displayed decision has a replayable evidence bundle.
+            </p>
+          </div>
+          <div class="case-grid">
+            <article
+              class="case-card sqlite-case reveal"
+              data-case="sqlite-web"
+              data-glow
+            >
+              <div class="case-meta">
+                <span
+                  ><svg class="icon"><use href="#i-db" /></svg> SQLITE-WEB</span
+                ><span class="model-tag">DeepSeek V4 Flash</span>
+              </div>
+              <h3>Make database<br />queries cheaper.</h3>
+              <p class="case-description">
+                Choose up to four indexes for a hidden SQLite workload.
+                Experimental feedback reveals which choices reduce measured
+                query cost.
+              </p>
+              <div
+                class="case-chart"
+                role="img"
+                aria-label="SQLite-Web normalized score. Baseline 0.000. Research result 0.886."
+              >
+                <div class="chart-label">
+                  <span>Normalized query-cost reduction</span
+                  ><span>HIGHER IS BETTER</span>
+                </div>
+                <div class="chart-row">
+                  <span>Baseline</span>
+                  <div class="chart-track"><i style="--value: 0%"></i></div>
+                  <strong data-value="baseline">0.000</strong>
+                </div>
+                <div class="chart-row">
+                  <span>Research result</span>
+                  <div class="chart-track">
+                    <i style="--value: 88.5547%"></i>
+                  </div>
+                  <strong data-value="main">0.886</strong>
+                </div>
+                <p>
+                  1.0 represents the task’s maximum normalized cost reduction.
+                </p>
+              </div>
+              <div class="case-metrics">
+                <div>
+                  <strong>0<span>/96</span></strong
+                  ><span>challenger recoveries</span>
+                </div>
+                <div>
+                  <strong>30<span> vs </span>0</strong
+                  ><span>truthful / neutral successes</span>
+                </div>
+              </div>
+              <div class="case-bottom">
+                <span class="certified-label"
+                  ><svg class="icon"><use href="#i-check" /></svg> Core +
+                  Evidence certified</span
+                ><a
+                  href="https://github.com/cxcscmu/Discovery-Certification-Protocol/tree/main/examples/audits/sqlite-web"
+                  aria-label="Inspect SQLite-Web evidence bundle"
+                  ><svg class="icon"><use href="#i-external" /></svg
+                ></a>
+              </div>
+            </article>
+            <article
+              class="case-card catalyst-case reveal"
+              data-case="virtual-catalyst"
+              data-glow
+            >
+              <div class="case-meta">
+                <span
+                  ><svg class="icon"><use href="#i-flask" /></svg> VIRTUAL
+                  CATALYST</span
+                ><span class="model-tag">DeepSeek V4 Pro</span>
+              </div>
+              <h3>Find a better<br />catalyst recipe.</h3>
+              <p class="case-description">
+                Tune five controls in a virtual catalyst task. Use experimental
+                measurements to find a recipe with higher sealed utility.
+              </p>
+              <div
+                class="case-chart"
+                role="img"
+                aria-label="Virtual catalyst normalized score. Baseline 0.599. Research result 1.000."
+              >
+                <div class="chart-label">
+                  <span>Normalized recipe utility</span
+                  ><span>HIGHER IS BETTER</span>
+                </div>
+                <div class="chart-row">
+                  <span>Baseline</span>
+                  <div class="chart-track">
+                    <i style="--value: 59.8999%"></i>
+                  </div>
+                  <strong data-value="baseline">0.599</strong>
+                </div>
+                <div class="chart-row">
+                  <span>Research result</span>
+                  <div class="chart-track"><i style="--value: 100%"></i></div>
+                  <strong data-value="main">1.000</strong>
+                </div>
+                <p>1.0 is the optimum of this controlled virtual task.</p>
+              </div>
+              <div class="case-metrics">
+                <div>
+                  <strong>0<span>/96</span></strong
+                  ><span>challenger recoveries</span>
+                </div>
+                <div>
+                  <strong>30<span> vs </span>0</strong
+                  ><span>truthful / neutral successes</span>
+                </div>
+              </div>
+              <div class="case-bottom">
+                <span class="certified-label"
+                  ><svg class="icon"><use href="#i-check" /></svg> Core +
+                  Evidence certified</span
+                ><a
+                  href="https://github.com/cxcscmu/Discovery-Certification-Protocol/tree/main/examples/audits/virtual-catalyst"
+                  aria-label="Inspect virtual catalyst evidence bundle"
+                  ><svg class="icon"><use href="#i-external" /></svg
+                ></a>
+              </div>
+            </article>
+          </div>
+          <div class="evidence-summary reveal">
+            <div>
+              <strong>0.0468</strong
+              ><span
+                >Recovery probability upper bound<br />for each registered
+                audit</span
+              >
+            </div>
+            <div>
+              <strong>45 / 45</strong
+              ><span>Positive controls recovered<br />in each audit</span>
+            </div>
+            <div>
+              <strong>60 pairs</strong
+              ><span>Passing null calibration<br />in each audit</span>
+            </div>
+          </div>
+          <p class="scope-note">
+            Each feedback study contains 30 fresh pairs. Decisions are
+            conditional on the registered model, budget, information, and
+            policies. These are locally replayed protocol decisions; formal
+            third-party issuance is a separate step.
+          </p>
+          <a
+            class="text-link"
+            href="https://github.com/cxcscmu/Discovery-Certification-Protocol/blob/main/examples/README.md"
+            >Explore all four published audit bundles
+            <svg class="icon"><use href="#i-arrow" /></svg
+          ></a>
+        </div>
+      </section>
+
+      <section
+        class="section toolkit-section wrap"
+        id="start"
+        aria-labelledby="toolkit-title"
+      >
+        <div class="section-heading reveal">
+          <p class="eyebrow">THE TOOLKIT</p>
+          <h2 id="toolkit-title">
+            A small install.<br /><span class="muted"
+              >An inspectable result.</span
+            >
+          </h2>
+          <p>
+            Start with an existing audit, then bring the protocol to your own
+            research loop. Two focused Python packages cover evidence
+            verification and capture.
+          </p>
+        </div>
+        <div class="package-grid">
+          <article class="package-card reveal">
+            <span class="package-icon"
+              ><svg class="icon"><use href="#i-shield" /></svg
+            ></span>
+            <p class="eyebrow">THE OFFLINE VERIFIER</p>
+            <h3>dcp-audit</h3>
+            <p>
+              Verify bundle integrity, recompute the protocol decision, and
+              compare it with the recorded certificate. Runs locally using
+              frozen evidence.
+            </p>
+            <div class="feature-chips">
+              <span>Deterministic</span><span>LLM-free</span
+              ><span>Offline replay</span>
+            </div>
+            <a class="text-link" href="https://pypi.org/project/dcp-audit/"
+              >Get dcp-audit on PyPI
+              <svg class="icon"><use href="#i-external" /></svg
+            ></a>
+          </article>
+          <article class="package-card reveal">
+            <span class="package-icon purple"
+              ><svg class="icon"><use href="#i-network" /></svg
+            ></span>
+            <p class="eyebrow">THE RESEARCH HARNESS</p>
+            <h3>dcp-harness</h3>
+            <p>
+              A lightweight Claude Code CLI wrapper for prospective research
+              runs. Connect a task adapter, capture allowed Web responses, and
+              schedule the audit controls.
+            </p>
+            <div class="feature-chips">
+              <span>Web capture</span><span>Matched challenges</span
+              ><span>Paired runs</span>
+            </div>
+            <a class="text-link" href="https://pypi.org/project/dcp-harness/"
+              >Get dcp-harness on PyPI
+              <svg class="icon"><use href="#i-external" /></svg
+            ></a>
+          </article>
+        </div>
+        <div class="quickstart reveal">
+          <div class="quickstart-heading">
+            <div>
+              <span class="terminal-dots" aria-hidden="true"
+                ><i></i><i></i><i></i></span
+              ><span>From install to evidence</span>
+            </div>
+            <span>Python 3.11+ · use a virtual environment</span>
+          </div>
+          <div class="code-tabs" role="tablist" aria-label="Usage examples">
+            <button
+              type="button"
+              id="tab-replay"
+              role="tab"
+              aria-selected="true"
+              aria-controls="code-replay"
+            >
+              Replay an audit</button
+            ><button
+              type="button"
+              id="tab-python"
+              role="tab"
+              aria-selected="false"
+              aria-controls="code-python"
+              tabindex="-1"
+            >
+              Use Python</button
+            ><button
+              type="button"
+              id="tab-capture"
+              role="tab"
+              aria-selected="false"
+              aria-controls="code-capture"
+              tabindex="-1"
+            >
+              Start your own
+            </button>
+          </div>
+          <div
+            class="code-panel"
+            id="code-replay"
+            role="tabpanel"
+            aria-labelledby="tab-replay"
+            tabindex="0"
+          >
+            <button
+              class="copy-button"
+              type="button"
+              data-copy="snippet-replay"
+              aria-label="Copy replay commands"
+            >
+              <svg class="icon"><use href="#i-copy" /></svg><span>Copy</span>
+            </button>
+            <pre><code id="snippet-replay"><span class="code-comment"># Install in an isolated environment</span>
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install dcp-audit dcp-harness
+
+<span class="code-comment"># Get the published evidence and replay both audits</span>
+git clone https://github.com/cxcscmu/Discovery-Certification-Protocol.git
+cd Discovery-Certification-Protocol
+dcp verify examples/audits/sqlite-web
+dcp verify examples/audits/virtual-catalyst</code></pre>
+            <div class="terminal-result">
+              <span
+                ><svg class="icon"><use href="#i-check" /></svg> Expected
+                replay</span
+              ><code>VERIFIED · Core certified · Evidence certified</code>
+            </div>
+            <p class="code-note">
+              Replay verification checks agreement with the saved decision. The
+              Core and Evidence fields report the scientific verdict.
+            </p>
+          </div>
+          <div
+            class="code-panel"
+            id="code-python"
+            role="tabpanel"
+            aria-labelledby="tab-python"
+            tabindex="0"
+            hidden
+          >
+            <button
+              class="copy-button"
+              type="button"
+              data-copy="snippet-python"
+              aria-label="Copy Python example"
+            >
+              <svg class="icon"><use href="#i-copy" /></svg><span>Copy</span>
+            </button>
+            <pre><code id="snippet-python"><span class="code-comment"># Run from the cloned repository after installing dcp-audit</span>
+from dcp.api import verify_bundle
+
+report = verify_bundle("examples/audits/sqlite-web")
+if not report["ok"]:
+    raise RuntimeError("; ".join(report["errors"]))
+
+verdict = report["replayed_verdict"]
+print(verdict["core"], verdict["evidence"])</code></pre>
+            <p class="code-note">
+              The verifier uses the recorded numerical evidence and frozen
+              registration. Model calls and API keys are unnecessary for replay.
+            </p>
+          </div>
+          <div
+            class="code-panel"
+            id="code-capture"
+            role="tabpanel"
+            aria-labelledby="tab-capture"
+            tabindex="0"
+            hidden
+          >
+            <button
+              class="copy-button"
+              type="button"
+              data-copy="snippet-capture"
+              aria-label="Copy harness commands"
+            >
+              <svg class="icon"><use href="#i-copy" /></svg><span>Copy</span>
+            </button>
+            <pre><code id="snippet-capture">dcp-harness init my-audit
+
+<span class="code-comment"># Complete task_adapter.py and configure dcp-harness.json.
+# Supply the public workspace, trusted evaluator, registered model,
+# budgets, feedback policies, and a pinned runtime.</span>
+dcp-harness doctor --config my-audit/dcp-harness.json
+dcp-harness run --config my-audit/dcp-harness.json --run my-audit/run-001</code></pre>
+            <p class="code-note">
+              Prospective capture uses authenticated Claude Code CLI and a
+              task-specific adapter. Certification-grade isolation uses the
+              configured Docker runtime.
+              <a
+                href="https://github.com/cxcscmu/Discovery-Certification-Protocol#run-a-prospective-audit"
+                >Read the setup guide ↗</a
+              >
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="paper-section section"
+        id="paper"
+        aria-labelledby="paper-title"
+      >
+        <div class="wrap paper-grid">
+          <div class="paper-intro reveal">
+            <p class="eyebrow">THE PAPER</p>
+            <h2 id="paper-title">Scores Alone Do Not<br />Prove Discovery.</h2>
+            <p class="paper-subtitle">
+              The Discovery Certification Protocol<br />for Auditing AI Research
+              Agents
+            </p>
+            <p class="authors">
+              Jingjie Ning · Shanshan Zhong · Xiaochuan Li · Ji Zeng
+            </p>
+            <p class="paper-affiliation">
+              School of Computer Science, Carnegie Mellon University
+            </p>
+            <a class="button button-primary" href="assets/dcp-paper.pdf"
+              >Read the full paper
+              <svg class="icon"><use href="#i-external" /></svg
+            ></a>
+            <p class="preprint-label">Public preprint · 2026</p>
+          </div>
+          <div class="citation-card reveal">
+            <div>
+              <span>CITE THIS WORK</span
+              ><button
+                class="copy-button"
+                type="button"
+                data-copy="citation"
+                aria-label="Copy BibTeX citation"
+              >
+                <svg class="icon"><use href="#i-copy" /></svg><span>Copy</span>
+              </button>
+            </div>
+            <pre><code id="citation">@misc{ning2026dcp,
+  title = {Scores Alone Do Not Prove Discovery:
+    The Discovery Certification Protocol
+    for Auditing AI Research Agents},
+  author = {Ning, Jingjie and Zhong, Shanshan
+    and Li, Xiaochuan and Zeng, Ji},
+  year = {2026},
+  howpublished = {Public preprint},
+  url = {https://cxcscmu.github.io/Discovery-Certification-Protocol/}
+}</code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer wrap">
+      <a class="brand-mark" href="#top">DCP<span>.</span></a>
+      <p>Make the evidence part of the result.</p>
+      <div>
+        <a href="https://github.com/cxcscmu/Discovery-Certification-Protocol"
+          >GitHub</a
+        ><a href="https://pypi.org/project/dcp-audit/">dcp-audit</a
+        ><a href="https://pypi.org/project/dcp-harness/">dcp-harness</a
+        ><a
+          href="https://github.com/cxcscmu/Discovery-Certification-Protocol/blob/main/LICENSE"
+          >Apache 2.0 · Code</a
+        >
+      </div>
+    </footer>
+    <div class="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

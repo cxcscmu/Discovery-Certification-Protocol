@@ -1,0 +1,12 @@
+{
+  "name": "dcp-project-page",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/check.mjs",
+    "serve": "python3 -m http.server 4173 --bind 127.0.0.1 --directory public"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}

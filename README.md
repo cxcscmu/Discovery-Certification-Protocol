@@ -1,8 +1,9 @@
 <h1 align="center">Discovery Certification Protocol</h1>
 
 <p align="center">
+  <a href="https://cxcscmu.github.io/Discovery-Certification-Protocol/"><img src="https://img.shields.io/badge/Homepage-DCP-637CF1" alt="DCP project homepage"></a>
   <a href="https://github.com/cxcscmu/Discovery-Certification-Protocol"><img src="https://img.shields.io/badge/GitHub-Repository-181717?logo=github" alt="GitHub repository"></a>
-  <a href="https://arxiv.org/abs/XXXX.XXXXX"><img src="https://img.shields.io/badge/Paper-arXiv-b31b1b?logo=arxiv" alt="arXiv paper"></a>
+  <a href="https://cxcscmu.github.io/Discovery-Certification-Protocol/assets/dcp-paper.pdf"><img src="https://img.shields.io/badge/Paper-PDF-b31b1b" alt="DCP public paper"></a>
   <a href="https://pypi.org/project/dcp-audit/"><img src="https://img.shields.io/pypi/v/dcp-audit?label=dcp-audit&logo=pypi&color=3775A9" alt="dcp-audit on PyPI"></a>
   <a href="https://pypi.org/project/dcp-harness/"><img src="https://img.shields.io/pypi/v/dcp-harness?label=dcp-harness&logo=pypi&color=3775A9" alt="dcp-harness on PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-D22128" alt="Apache-2.0 license"></a>
