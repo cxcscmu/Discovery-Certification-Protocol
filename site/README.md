@@ -38,6 +38,10 @@ the citation. The current entry is honestly labeled a public preprint.
 The PDF's title page links back to this homepage alongside the two PyPI
 packages and the GitHub repository. The homepage's package strip uses larger
 PyPI-branded buttons for direct installation entry points.
+The paper's homepage button is also available independently as
+`public/assets/homepage-button.svg`, `.pdf`, and `.png`. The navy-violet artwork
+uses vector gradients and a beveled D mark; the standalone SVG embeds Inter
+and its license, and the PNG is a preview rendered from the vector PDF.
 
 The hero constellation illustrates research iteration; it is decorative
 protocol geometry rather than experimental measurements. Result cards use
