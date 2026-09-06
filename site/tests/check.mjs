@@ -116,7 +116,10 @@ try {
     assert.equal(certificate.feedback_test.neutral_recovery.admissible_hits, 0);
     assert.equal(certificate.no_feedback_recovery.n_ind, 96);
     assert.equal(certificate.no_feedback_recovery.admissible_hits, 0);
-    assert.equal(certificate.no_feedback_recovery.positive_control.successes, 45);
+    assert.equal(
+      certificate.no_feedback_recovery.positive_control.successes,
+      45,
+    );
     assert.equal(certificate.no_feedback_recovery.positive_control.trials, 45);
     assert.equal(certificate.feedback_test.sham_n, 60);
     assert.equal(certificate.feedback_test.sham_adequacy, "pass");
@@ -201,7 +204,7 @@ try {
         }
       const clipped = [
         ...document.querySelectorAll(
-          ".orbit-node,.hero-actions>a,.case-card,.nav-paper",
+          ".orbit-node,.hero-actions>a,.case-card,.nav-paper,.package-resource",
         ),
       ]
         .filter((el) => {
@@ -214,6 +217,13 @@ try {
     assert.equal(layout.overflow, false, `Horizontal overflow at ${width}`);
     assert.deepEqual(layout.overlaps, [], `Overlapping nodes at ${width}`);
     assert.deepEqual(layout.clipped, [], `Clipped content at ${width}`);
+    for (const resource of await page.locator(".package-resource").all()) {
+      const box = await resource.boundingBox();
+      assert.ok(
+        box.height >= 64 && box.width >= 110,
+        `Prominent package button at ${width}`,
+      );
+    }
     await page.screenshot({
       path: path.join(output, `homepage-${width}.png`),
       fullPage: true,
@@ -224,10 +234,18 @@ try {
       await page.evaluate(() => document.activeElement?.blur());
       await page.screenshot({ path: path.join(output, "hero-desktop.png") });
       for (const id of ["protocol", "evidence", "start", "paper"]) {
-        await page.locator(`#${id}`).screenshot({ path: path.join(output, `${id}-desktop.png`) });
+        await page
+          .locator(`#${id}`)
+          .screenshot({ path: path.join(output, `${id}-desktop.png`) });
       }
+      await page
+        .locator(".resource-strip")
+        .screenshot({ path: path.join(output, "packages-desktop.png") });
     }
     if (width === 390) {
+      await page
+        .locator(".resource-strip")
+        .screenshot({ path: path.join(output, "packages-mobile.png") });
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.screenshot({ path: path.join(output, "hero-mobile.png") });
     }

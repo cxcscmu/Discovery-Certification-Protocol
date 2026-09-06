@@ -35,6 +35,9 @@ copied from the paper workspace's `paper/arxiv/manuscript.pdf`. Update this
 asset after a new public manuscript build. Once an arXiv identifier is
 assigned, add its real abstract URL and eprint metadata to `index.html` and
 the citation. The current entry is honestly labeled a public preprint.
+The PDF's title page links back to this homepage alongside the two PyPI
+packages and the GitHub repository. The homepage's package strip uses larger
+PyPI-branded buttons for direct installation entry points.
 
 The hero constellation illustrates research iteration; it is decorative
 protocol geometry rather than experimental measurements. Result cards use
